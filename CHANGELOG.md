@@ -4,7 +4,7 @@
 
 - First version. Released on an unsuspecting world.
 
-## 0.2.0.1
+## 0.2.0.2 -- 2024-07-01
 
 - Added `Types` module
 - Structured the project
