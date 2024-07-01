@@ -2,7 +2,7 @@
 
 ![image](https://github.com/yoonthegoon/openskill.hs/assets/71526721/c26aa0e9-7d0f-4282-a329-c0cf2320a4c3)
 
-Haskell implimentation of OpenSkill.
+Haskell implementation of OpenSkill.
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/yoonthegoon/openskill.hs/haskell.yml)
 ![Hackage Version](https://img.shields.io/hackage/v/openskill)
