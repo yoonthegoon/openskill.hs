@@ -1,42 +1,36 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module OpenSkill.Types where
 
--- | A team's rank in a match; lower is better.
+import GHC.Generics (Generic)
+
+data Distribution = Distribution
+  { mu :: Float,
+    sigma :: Float
+  }
+  deriving (Show, Generic)
+
+data Rating = Rating
+  { theta :: Float,
+    beta :: Float
+  }
+  deriving (Show, Generic)
+
 type Rank = Int
 
 type Ranks = [Rank]
 
--- | Assumed distribution of players' skill.
-data Distribution = Distribution
-  { -- | The mean of the distribution.
-    mu :: Float,
-    -- | The standard deviation of the distribution.
-    sigma :: Float
-  }
-  deriving (Show)
-
--- | A player's skill.
-data Rating = Rating
-  { -- | Strength of the player.
-    theta :: Float,
-    -- | Uncertainty of the player's performance.
-    beta :: Float
-  }
-  deriving (Show)
-
--- | A team is a list of ratings.
 type Team = [Rating]
 
 type Teams = [Team]
 
-class Model m where
-  -- | Update the ratings of the teams after a match.
-  rate :: m -> Teams -> Teams
+defaultDistribution :: Distribution
+defaultDistribution = Distribution 25 (25 / 3)
 
-  -- | Compute the probability of each team winning.
-  winProbability :: m -> Teams -> [Float]
+defaultRating :: Rating
+defaultRating = Rating 25 (25 / 6)
 
-data BradleyTerry = BradleyTerry
-
-data PlackettLuce = PlackettLuce
-
-data ThurstoneMosteller = ThurstoneMosteller
+class Model a where
+  newRating :: a -> Rating
+  rate :: a -> Teams -> Ranks -> Teams
+  winProbability :: a -> Teams -> [Float]
