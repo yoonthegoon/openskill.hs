@@ -14,8 +14,7 @@ Haskell implimentation of OpenSkill.
 cabal install openskill
 ``` -->
 
-```bash![Uploading tmp.svg…]()
-
+```bash
 git clone git@github.com:yoonthegoon/openskill.hs.git
 cd openskill.hs
 cabal install
