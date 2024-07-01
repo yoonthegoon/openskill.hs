@@ -5,6 +5,15 @@ type Rank = Int
 
 type Ranks = [Rank]
 
+-- | Assumed distribution of players' skill.
+data Distribution = Distribution
+  { -- | The mean of the distribution.
+    mu :: Float,
+    -- | The standard deviation of the distribution.
+    sigma :: Float
+  }
+  deriving (Show)
+
 -- | A player's skill.
 data Rating = Rating
   { -- | Strength of the player.
@@ -12,6 +21,7 @@ data Rating = Rating
     -- | Uncertainty of the player's performance.
     beta :: Float
   }
+  deriving (Show)
 
 -- | A team is a list of ratings.
 type Team = [Rating]

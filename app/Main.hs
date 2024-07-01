@@ -1,19 +1,13 @@
 module Main where
 
-import OpenSkill (Rating (..), teamPerformance)
+import OpenSkill (Rating (..), sumRatings)
 
 main :: IO ()
 main = do
-  let t1 =
-        [ Rating 25 (25 / 6),
-          Rating 25 (25 / 6)
-        ]
-  let r1 = teamPerformance t1
-  print $ beta r1
-  print [theta rating, beta rating]
+  print rating
   where
     rating =
-      teamPerformance
+      sumRatings
         [ Rating 25 (25 / 6),
           Rating 25 (25 / 6)
         ]

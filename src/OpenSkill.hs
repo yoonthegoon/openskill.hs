@@ -1,8 +1,8 @@
 module OpenSkill
   ( Rating (..),
-    teamPerformance,
+    sumRatings,
   )
 where
 
 import OpenSkill.Types (Rating (..))
-import OpenSkill.Utils (teamPerformance)
+import OpenSkill.Utils (sumRatings)
