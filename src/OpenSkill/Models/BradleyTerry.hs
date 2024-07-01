@@ -3,7 +3,7 @@
 module Openskill.Models.BradleyTerry where
 
 import GHC.Generics
-import Openskill.Types
+import OpenSkill.Types
 
 data BradleyTerry = BradleyTerry
   { distribution :: Distribution,

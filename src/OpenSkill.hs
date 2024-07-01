@@ -4,5 +4,5 @@ module OpenSkill
   )
 where
 
-import OpenSkill.Types (Rating (..))
-import OpenSkill.Utils (sumRatings)
+import OpenSkill.Types
+import OpenSkill.Utils

@@ -3,7 +3,7 @@
 module Openskill.Models.PlackettLuce where
 
 import GHC.Generics
-import Openskill.Types
+import OpenSkill.Types
 
 data PlackettLuce = PlackettLuce
   { distribution :: Distribution,

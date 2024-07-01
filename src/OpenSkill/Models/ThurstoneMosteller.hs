@@ -3,7 +3,7 @@
 module Openskill.Models.ThurstoneMosteller where
 
 import GHC.Generics
-import Openskill.Types
+import OpenSkill.Types
 
 data ThurstoneMosteller = ThurstoneMosteller
   { distribution :: Distribution,

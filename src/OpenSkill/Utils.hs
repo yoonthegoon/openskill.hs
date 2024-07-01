@@ -1,6 +1,6 @@
 module OpenSkill.Utils where
 
-import OpenSkill.Types (Rating (..), Team)
+import OpenSkill.Types
 
 addRatings :: Rating -> Rating -> Rating
 -- ^ Add two ratings together.
