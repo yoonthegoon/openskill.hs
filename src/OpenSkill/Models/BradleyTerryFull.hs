@@ -1,4 +1,4 @@
-module OpenSkill.Models.ThurstoneMostellerFull where
+module OpenSkill.Models.BradleyTerryFull where
 
 import OpenSkill.Types
   ( Model (..),
@@ -7,13 +7,13 @@ import OpenSkill.Types
     defaultOptions,
   )
 
-newtype ThurstoneMostellerFull = ThurstoneMostellerFull {options :: Options}
+newtype BradleyTerryFull = BradleyTerryFull {options :: Options}
 
-instance Model ThurstoneMostellerFull where
+instance Model BradleyTerryFull where
   newRating self = Strength (mu $ options self) (sigma $ options self)
   drawProbability _ _ = error "Not implemeneted"
   winProbabilities _ _ = error "Not implemented"
   rate _ _ = error "Not implemented"
 
-thurstoneMostellerFull :: ThurstoneMostellerFull
-thurstoneMostellerFull = ThurstoneMostellerFull defaultOptions
+bradleyTerryFull :: BradleyTerryFull
+bradleyTerryFull = BradleyTerryFull defaultOptions
