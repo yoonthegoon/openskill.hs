@@ -1,22 +1,18 @@
+{-# OPTIONS_GHC -Wno-type-defaults #-}
+
 module OpenSkill.Utils where
 
-import OpenSkill.Types
+import OpenSkill.Types (Distribution (sumd), Strength (..), Team)
 
-addRatings :: Rating -> Rating -> Rating
--- ^ Add two ratings together.
---
--- @
--- addRatings Rating -> Rating -> Rating
--- @
--- * @Rating@: The strength of the player and the uncertainty of their performance.
-addRatings r1 r2 = Rating (theta r1 + theta r2) (sqrt $ beta r1 ^ (2 :: Int) + beta r2 ^ (2 :: Int))
+standardizedQuantity :: Strength -> Strength -> Double
+standardizedQuantity theta prior = (mu' theta - mu' prior) / sigma' prior
 
-sumRatings :: Team -> Rating
--- ^ Sum the ratings of a team.
---
--- @
--- sumRatings Team -> Rating
--- @
--- * @Team@: @[Rating]@ The team whose ratings are to be summed.
--- * @Rating@: The strength of the team and the uncertainty of its performance.
-sumRatings = foldr addRatings (Rating 0 0)
+ordinal :: Strength -> Double
+ordinal theta = mu' theta - 3 * sigma' theta
+
+update :: Double -> Double -> Double -> Strength -> Team -> Strength
+update omega delta kappa theta_j theta_js = Strength mu sigma
+  where
+    theta = sumd theta_js
+    mu = mu' theta_j + mu' theta + sigma' theta_j ^ 2 / sigma' theta * omega
+    sigma = sqrt $ sigma' theta_j ^ 2 * max (1 - sigma' theta_j ^ 2 / sigma' theta ^ 2 * delta) kappa

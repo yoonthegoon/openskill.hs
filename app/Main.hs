@@ -1,13 +1,7 @@
 module Main where
 
-import OpenSkill (Rating (..), sumRatings)
+import OpenSkill
 
 main :: IO ()
 main = do
-  print rating
-  where
-    rating =
-      sumRatings
-        [ Rating 25 (25 / 6),
-          Rating 25 (25 / 6)
-        ]
+  print "hello world"
