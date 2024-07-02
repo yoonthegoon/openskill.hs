@@ -68,6 +68,7 @@ library
                     , OpenSkill.Utils
                     , OpenSkill.Models.BradleyTerryFull
                     , OpenSkill.Models.BradleyTerryPart
+                    , OpenSkill.Models.PlackettLuce
                     , OpenSkill.Models.ThurstoneMostellerFull
                     , OpenSkill.Models.ThurstoneMostellerPart
 
