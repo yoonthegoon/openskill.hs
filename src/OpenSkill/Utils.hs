@@ -1,8 +1,22 @@
 {-# OPTIONS_GHC -Wno-type-defaults #-}
 
-module OpenSkill.Utils where
+module OpenSkill.Utils
+  ( defaultOptions,
+    standardizedQuantity,
+    ordinal,
+    update,
+  )
+where
 
-import OpenSkill.Types (Distribution (sumd), Strength (..), Team)
+import OpenSkill.Types
+  ( Distribution (sumd),
+    Options (Options),
+    Strength (..),
+    Team,
+  )
+
+defaultOptions :: Options
+defaultOptions = Options 25 (25 / 3) (25 / 6) 0.1 0.0001 Nothing
 
 standardizedQuantity :: Strength -> Strength -> Double
 standardizedQuantity theta prior = (mu' theta - mu' prior) / sigma' prior
