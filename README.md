@@ -1,12 +1,10 @@
 # openskill.hs
 
-![image](https://github.com/yoonthegoon/openskill.hs/assets/71526721/c26aa0e9-7d0f-4282-a329-c0cf2320a4c3)
-
-Haskell implementation of OpenSkill
-
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/yoonthegoon/openskill.hs/haskell.yml)
 ![Hackage Version](https://img.shields.io/hackage/v/openskill)
 ![GitHub License](https://img.shields.io/github/license/yoonthegoon/openskill.hs)
+
+Haskell implementation of OpenSkill
 
 ## Installation
 
@@ -25,33 +23,18 @@ cabal install
 <!-- TODO: actually make it this usable -->
 
 ```haskell
-import OpenSkill
-  ( PlackettLuce (..), -- or any other ranking model
-    Rating (..)
-  )
-
-main :: IO ()
-main = do
-  let pl = PlackettLuce (25, 25 / 3)
-  let team1 =
-    [ Rating 25 (25 / 6),
-      Rating 25 (25 / 6)
-    ]
-  let team2 =
-    [ Rating 25 (25 / 6),
-      Rating 25 (25 / 6)
-    ]
-  let teams = [team1, team2]
-  print $ rate pl teams [0, 1]
-  print $ winProbability pl teams
-```
-
-```
-[[Rating {theta = 26.964295, beta = 8.1779626},Rating {theta = 26.964295, beta = 8.1779626}],[Rating {theta = 23.035705, beta = 8.1779626},Rating {theta = 23.035705, beta = 8.1779626}]]
+ghci> import OpenSkill
+ghci> rating = newRating plackettLuce
+ghci> rating
+Rating {theta = 25.0, beta = 8.3333333}
+ghci> team1 = [rating, rating]
+ghci> team2 = team1
+ghci> teams = [team1, team2]
+ghci> winProbabilities plackettLuce teams
 [0.5,0.5]
+ghci> rate plackettLuce teams
+[[Rating {theta = 26.964295, beta = 8.1779626},Rating {theta = 26.964295, beta = 8.1779626}],[Rating {theta = 23.035705, beta = 8.1779626},Rating {theta = 23.035705, beta = 8.1779626}]]
 ```
-
-<!-- TODO: add console usage -->
 
 ## Implementations in other languages
 
