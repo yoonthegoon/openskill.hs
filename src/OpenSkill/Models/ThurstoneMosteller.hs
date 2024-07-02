@@ -1,1 +1,0 @@
-module OpenSkill.Models.ThurstoneMosteller where
