@@ -101,7 +101,6 @@ executable openskill
     -- Other library packages from which modules are imported.
     build-depends:
         base ^>=4.17.2.1,
-        statistics,
         openskill
 
     -- Directories containing source files.
@@ -135,5 +134,4 @@ test-suite openskill-test
     -- Test dependencies.
     build-depends:
         base ^>=4.17.2.1,
-        statistics,
         openskill

@@ -1,29 +1,58 @@
 {-# LANGUAGE InstanceSigs #-}
+{-# OPTIONS_GHC -Wno-type-defaults #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 
 module OpenSkill.Models.BradleyTerryFull where
 
 import OpenSkill.Types
-  ( Match,
+  ( Distribution (..),
     Model (..),
     Options (..),
-    Strength (..),
+    Rating (..),
+    Team,
   )
-import OpenSkill.Utils (defaultOptions)
+import OpenSkill.Utils
+  ( defaultOptions,
+    update,
+  )
+
+bradleyTerryFull :: BradleyTerryFull
+bradleyTerryFull = BradleyTerryFull defaultOptions
 
 newtype BradleyTerryFull = BradleyTerryFull {options :: Options}
 
 instance Model BradleyTerryFull where
-  newRating :: BradleyTerryFull -> Strength
-  newRating self = Strength (mu $ options self) (sigma $ options self)
+  newRating :: BradleyTerryFull -> Rating
+  newRating self = Rating (muI $ options self) (sigmaI $ options self)
 
-  drawProbability :: BradleyTerryFull -> Match -> Double
-  drawProbability _ _ = error "Not implemeneted"
+  rate :: BradleyTerryFull -> [Team] -> [Team]
+  rate self teams = zipWith (curry rateTeam) [0 ..] teams
+    where
+      kappa' = kappa $ options self
+      gammaQ' = gammaQ $ options self
 
-  winProbabilities :: BradleyTerryFull -> Match -> [Double]
-  winProbabilities _ _ = error "Not implemented"
+      rateTeam :: (Int, Team) -> Team
+      rateTeam (i, teamI) = map ratePlayer teamI
+        where
+          ratingI = sumd teamI
+          filteredTeams = filter (\(q, _) -> q /= i) (zip [0 ..] teams)
+          omegaI = foldl calcOmegaI 0 filteredTeams
+          deltaI = foldl calcDeltaI 0 filteredTeams
 
-  rate :: BradleyTerryFull -> Match -> Match
-  rate _ _ = error "Not implemented"
+          calcOmegaI :: Double -> (Int, Team) -> Double
+          calcOmegaI acc (q, teamQ) = acc + (sigma ratingI ** 2 / cIQ) * (s - pIQ)
+            where
+              ratingQ = sumd teamQ
+              cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta (options self) ** 2)
+              pIQ = exp (mu ratingI / cIQ) / (exp (mu ratingI / cIQ) + exp (mu ratingQ / cIQ))
+              s = if q > i then 1 else 0
 
-bradleyTerryFull :: BradleyTerryFull
-bradleyTerryFull = BradleyTerryFull defaultOptions
+          calcDeltaI :: Double -> (Int, Team) -> Double
+          calcDeltaI acc (_, teamQ) = acc + gammaQ' (sigma ratingI) cIQ * ((sigma ratingI / cIQ) ** 2) * pIQ * (1 - pIQ)
+            where
+              ratingQ = sumd teamQ
+              cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta (options self) ** 2)
+              pIQ = exp (mu ratingI / cIQ) / (exp (mu ratingI / cIQ) + exp (mu ratingQ / cIQ))
+
+          ratePlayer :: Rating -> Rating
+          ratePlayer ratingIJ = update ratingIJ ratingI omegaI deltaI kappa'

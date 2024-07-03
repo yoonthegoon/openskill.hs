@@ -1,12 +1,13 @@
 module OpenSkill
-  ( Options (..),
-    Strength (..),
-    ordinal,
-    bradleyTerryFull,
+  ( bradleyTerryFull,
     bradleyTerryPart,
     plackettLuce,
     thurstoneMostellerFull,
     thurstoneMostellerPart,
+    Model (..),
+    Options (..),
+    Rating (..),
+    ordinal,
   )
 where
 
@@ -15,5 +16,5 @@ import OpenSkill.Models.BradleyTerryPart (bradleyTerryPart)
 import OpenSkill.Models.PlackettLuce (plackettLuce)
 import OpenSkill.Models.ThurstoneMostellerFull (thurstoneMostellerFull)
 import OpenSkill.Models.ThurstoneMostellerPart (thurstoneMostellerPart)
-import OpenSkill.Types (Options (..), Strength (..))
+import OpenSkill.Types (Model (..), Options (..), Rating (..))
 import OpenSkill.Utils (ordinal)

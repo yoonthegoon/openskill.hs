@@ -3,26 +3,20 @@
 module OpenSkill.Models.BradleyTerryPart where
 
 import OpenSkill.Types
-  ( Match,
-    Model (..),
+  ( Model (..),
     Options (..),
-    Strength (..),
+    Rating (..),
+    Team,
   )
 import OpenSkill.Utils (defaultOptions)
 
 newtype BradleyTerryPart = BradleyTerryPart {options :: Options}
 
 instance Model BradleyTerryPart where
-  newRating :: BradleyTerryPart -> Strength
-  newRating self = Strength (mu $ options self) (sigma $ options self)
+  newRating :: BradleyTerryPart -> Rating
+  newRating self = Rating (muI $ options self) (sigmaI $ options self)
 
-  drawProbability :: BradleyTerryPart -> Match -> Double
-  drawProbability _ _ = error "Not implemeneted"
-
-  winProbabilities :: BradleyTerryPart -> Match -> [Double]
-  winProbabilities _ _ = error "Not implemented"
-
-  rate :: BradleyTerryPart -> Match -> Match
+  rate :: BradleyTerryPart -> [Team] -> [Team]
   rate _ _ = error "Not implemented"
 
 bradleyTerryPart :: BradleyTerryPart

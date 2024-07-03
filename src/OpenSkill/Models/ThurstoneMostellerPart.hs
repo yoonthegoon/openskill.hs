@@ -3,26 +3,20 @@
 module OpenSkill.Models.ThurstoneMostellerPart where
 
 import OpenSkill.Types
-  ( Match,
-    Model (..),
+  ( Model (..),
     Options (..),
-    Strength (..),
+    Rating (..),
+    Team,
   )
 import OpenSkill.Utils (defaultOptions)
 
 newtype ThurstoneMostellerPart = ThurstoneMostellerPart {options :: Options}
 
 instance Model ThurstoneMostellerPart where
-  newRating :: ThurstoneMostellerPart -> Strength
-  newRating self = Strength (mu $ options self) (sigma $ options self)
+  newRating :: ThurstoneMostellerPart -> Rating
+  newRating self = Rating (muI $ options self) (sigmaI $ options self)
 
-  drawProbability :: ThurstoneMostellerPart -> Match -> Double
-  drawProbability _ _ = error "Not implemeneted"
-
-  winProbabilities :: ThurstoneMostellerPart -> Match -> [Double]
-  winProbabilities _ _ = error "Not implemented"
-
-  rate :: ThurstoneMostellerPart -> Match -> Match
+  rate :: ThurstoneMostellerPart -> [Team] -> [Team]
   rate _ _ = error "Not implemented"
 
 thurstoneMostellerPart :: ThurstoneMostellerPart

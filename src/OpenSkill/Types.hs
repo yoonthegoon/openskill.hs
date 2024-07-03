@@ -1,16 +1,11 @@
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# OPTIONS_GHC -Wno-type-defaults #-}
 
 module OpenSkill.Types
   ( Distribution (..),
-    Strength (..),
+    Rating (..),
     Team,
-    Match,
-    Rank,
-    Ranks,
-    Gamma,
     Options (..),
     Model (..),
   )
@@ -23,57 +18,53 @@ class Distribution d where
 
   sumd :: [d] -> d
   sumd [] = error "No distributions to add"
-  sumd (d : ds) = foldr add d ds
+  sumd (x : xs) = foldr add x xs
 
   sub :: d -> d -> d
 
-data Strength = Strength
-  { mu' :: Double,
-    sigma' :: Double
+-- | A rating is a pair of mean and standard deviation
+-- * @mu@ - mean
+-- * @sigma@ - standard deviation
+data Rating = Rating
+  { mu :: Double,
+    sigma :: Double
   }
   deriving (Show, Generic)
 
-instance Distribution Strength where
-  add :: Strength -> Strength -> Strength
+instance Distribution Rating where
+  add :: Rating -> Rating -> Rating
   add self other =
-    Strength
-      { mu' = mu' self + mu' other,
-        sigma' = sqrt $ sigma' self ^ 2 + sigma' other ^ 2
+    Rating
+      { mu = mu self + mu other,
+        sigma = sqrt $ sigma self ^ 2 + sigma other ^ 2
       }
 
-  sub :: Strength -> Strength -> Strength
+  sub :: Rating -> Rating -> Rating
   sub self other =
-    Strength
-      { mu' = mu' self - mu' other,
-        sigma' = sqrt $ sigma' self ^ 2 + sigma' other ^ 2
+    Rating
+      { mu = mu self - mu other,
+        sigma = sqrt $ sigma self ^ 2 + sigma other ^ 2
       }
 
-type Team = [Strength]
+type Team = [Rating]
 
-type Match = [Team]
-
-type Rank = Integer
-
-type Ranks = [Rank]
-
-type Gamma = Double -> Integer -> Double -> Double -> Team -> Integer -> Double
-
-instance Show Gamma where
-  show :: Gamma -> String
-  show _ = "swappable gamma function"
-
+-- | Options for the model
+-- * @muI :: Double@ - player initial mean
+-- * @sigmaI :: Double@ - player initial standard deviation
+-- * @beta :: Double@ - added uncertainty
+-- * @epsilon :: Double@ - draw margin
+-- * @kappa :: Double@ - positive lower bound of player variance
+-- * @gammaQ :: Double -> Double -> Double@ - function to control how fast player variance is reduced
 data Options = Options
-  { mu :: Double,
-    sigma :: Double,
+  { muI :: Double,
+    sigmaI :: Double,
     beta :: Double,
     epsilon :: Double,
     kappa :: Double,
-    gamma :: Maybe Gamma
+    gammaQ :: Double -> Double -> Double
   }
-  deriving (Show, Generic)
+  deriving (Generic)
 
 class Model m where
-  newRating :: m -> Strength
-  drawProbability :: m -> Match -> Double
-  winProbabilities :: m -> Match -> [Double]
-  rate :: m -> Match -> Match
+  newRating :: m -> Rating
+  rate :: m -> [Team] -> [Team]

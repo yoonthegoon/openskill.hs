@@ -4,4 +4,7 @@ import OpenSkill
 
 main :: IO ()
 main = do
-  print "hello world"
+  let rating = newRating bradleyTerryFull
+  let teamI = [rating, rating]
+  let teamsQ = teamI
+  print $ rate bradleyTerryFull [teamI, teamsQ]
