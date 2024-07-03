@@ -62,22 +62,22 @@ library
 
     -- Modules exported by the library.
     exposed-modules:  OpenSkill
-
-    -- Modules included in this library but not exported.
-    other-modules:    OpenSkill.Types
-                    , OpenSkill.Utils
                     , OpenSkill.Models.BradleyTerryFull
                     , OpenSkill.Models.BradleyTerryPart
                     , OpenSkill.Models.PlackettLuce
                     , OpenSkill.Models.ThurstoneMostellerFull
                     , OpenSkill.Models.ThurstoneMostellerPart
 
+    -- Modules included in this library but not exported.
+    other-modules:    OpenSkill.Types
+                    , OpenSkill.Utils
+
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.17.2.1,
-                      statistics
+                      erf
 
     -- Directories containing source files.
     hs-source-dirs:   src

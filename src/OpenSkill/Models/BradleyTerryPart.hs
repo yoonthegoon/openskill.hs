@@ -3,12 +3,19 @@
 module OpenSkill.Models.BradleyTerryPart where
 
 import OpenSkill.Types
-  ( Model (..),
+  ( -- Distribution (..),
+    Model (..),
     Options (..),
     Rating (..),
     Team,
   )
-import OpenSkill.Utils (defaultOptions)
+import OpenSkill.Utils
+  ( defaultOptions,
+  -- update,
+  )
+
+bradleyTerryPart :: BradleyTerryPart
+bradleyTerryPart = BradleyTerryPart defaultOptions
 
 newtype BradleyTerryPart = BradleyTerryPart {options :: Options}
 
@@ -18,6 +25,3 @@ instance Model BradleyTerryPart where
 
   rate :: BradleyTerryPart -> [Team] -> [Team]
   rate _ _ = error "Not implemented"
-
-bradleyTerryPart :: BradleyTerryPart
-bradleyTerryPart = BradleyTerryPart defaultOptions

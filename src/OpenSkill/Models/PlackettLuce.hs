@@ -1,14 +1,22 @@
 {-# LANGUAGE InstanceSigs #-}
+{-# OPTIONS_GHC -Wno-type-defaults #-}
 
 module OpenSkill.Models.PlackettLuce where
 
 import OpenSkill.Types
-  ( Model (..),
+  ( -- Distribution (..),
+    Model (..),
     Options (..),
     Rating (..),
     Team,
   )
-import OpenSkill.Utils (defaultOptions)
+import OpenSkill.Utils
+  ( defaultOptions,
+  -- update,
+  )
+
+plackettLuce :: PlackettLuce
+plackettLuce = PlackettLuce defaultOptions
 
 newtype PlackettLuce = PlackettLuce {options :: Options}
 
@@ -18,6 +26,3 @@ instance Model PlackettLuce where
 
   rate :: PlackettLuce -> [Team] -> [Team]
   rate _ _ = error "Not implemented"
-
-plackettLuce :: PlackettLuce
-plackettLuce = PlackettLuce defaultOptions

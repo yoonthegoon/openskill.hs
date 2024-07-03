@@ -8,3 +8,4 @@ main = do
   let teamI = [rating, rating]
   let teamsQ = teamI
   print $ rate bradleyTerryFull [teamI, teamsQ]
+  print $ rate thurstoneMostellerFull [[rating], [rating]]

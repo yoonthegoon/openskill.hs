@@ -28,6 +28,7 @@ instance Model BradleyTerryFull where
   rate :: BradleyTerryFull -> [Team] -> [Team]
   rate self teams = zipWith (curry rateTeam) [0 ..] teams
     where
+      beta' = beta $ options self
       kappa' = kappa $ options self
       gammaQ' = gammaQ $ options self
 
@@ -43,7 +44,7 @@ instance Model BradleyTerryFull where
           calcOmegaI acc (q, teamQ) = acc + (sigma ratingI ** 2 / cIQ) * (s - pIQ)
             where
               ratingQ = sumd teamQ
-              cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta (options self) ** 2)
+              cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta' ** 2)
               pIQ = exp (mu ratingI / cIQ) / (exp (mu ratingI / cIQ) + exp (mu ratingQ / cIQ))
               s = if q > i then 1 else 0
 
@@ -51,7 +52,7 @@ instance Model BradleyTerryFull where
           calcDeltaI acc (_, teamQ) = acc + gammaQ' (sigma ratingI) cIQ * ((sigma ratingI / cIQ) ** 2) * pIQ * (1 - pIQ)
             where
               ratingQ = sumd teamQ
-              cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta (options self) ** 2)
+              cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta' ** 2)
               pIQ = exp (mu ratingI / cIQ) / (exp (mu ratingI / cIQ) + exp (mu ratingQ / cIQ))
 
           ratePlayer :: Rating -> Rating

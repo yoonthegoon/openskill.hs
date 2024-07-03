@@ -3,12 +3,19 @@
 module OpenSkill.Models.ThurstoneMostellerPart where
 
 import OpenSkill.Types
-  ( Model (..),
+  ( -- Distribution (..),
+    Model (..),
     Options (..),
     Rating (..),
     Team,
   )
-import OpenSkill.Utils (defaultOptions)
+import OpenSkill.Utils
+  ( defaultOptions,
+  -- update,
+  )
+
+thurstoneMostellerPart :: ThurstoneMostellerPart
+thurstoneMostellerPart = ThurstoneMostellerPart defaultOptions
 
 newtype ThurstoneMostellerPart = ThurstoneMostellerPart {options :: Options}
 
@@ -18,6 +25,3 @@ instance Model ThurstoneMostellerPart where
 
   rate :: ThurstoneMostellerPart -> [Team] -> [Team]
   rate _ _ = error "Not implemented"
-
-thurstoneMostellerPart :: ThurstoneMostellerPart
-thurstoneMostellerPart = ThurstoneMostellerPart defaultOptions
