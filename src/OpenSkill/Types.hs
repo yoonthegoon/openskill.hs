@@ -55,13 +55,15 @@ type Team = [Rating]
 -- * @epsilon :: Double@ - draw margin
 -- * @kappa :: Double@ - positive lower bound of player variance
 -- * @gammaQ :: Double -> Double -> Double@ - function to control how fast player variance is reduced
+-- * @ranks :: [Int]@ - ranks of teams; smaller is better
 data Options = Options
   { muI :: Double,
     sigmaI :: Double,
     beta :: Double,
     epsilon :: Double,
     kappa :: Double,
-    gammaQ :: Double -> Double -> Double
+    gammaQ :: Double -> Double -> Double,
+    ranks :: [Int]
   }
   deriving (Generic)
 

@@ -20,7 +20,7 @@ import OpenSkill.Types
 --
 -- Returns: @Options@ - default options
 defaultOptions :: Options
-defaultOptions = Options 25 (25 / 3) (25 / 6) 0.1 0.0001 gammaQ
+defaultOptions = Options 25 (25 / 3) (25 / 6) 0.1 0.0001 gammaQ [0 ..]
   where
     gammaQ :: Double -> Double -> Double
     gammaQ sigmaI c = sigmaI / c
