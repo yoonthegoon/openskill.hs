@@ -1,6 +1,10 @@
 {-# LANGUAGE InstanceSigs #-}
 
-module OpenSkill.Models.ThurstoneMostellerPart where
+module OpenSkill.Models.ThurstoneMostellerPart
+  ( thurstoneMostellerPart,
+    ThurstoneMostellerPart,
+  )
+where
 
 import OpenSkill.Types
   ( -- Distribution (..),

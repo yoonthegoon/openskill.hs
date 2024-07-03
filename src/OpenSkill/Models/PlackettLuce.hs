@@ -1,7 +1,11 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# OPTIONS_GHC -Wno-type-defaults #-}
 
-module OpenSkill.Models.PlackettLuce where
+module OpenSkill.Models.PlackettLuce
+  ( plackettLuce,
+    PlackettLuce (..),
+  )
+where
 
 import OpenSkill.Types
   ( -- Distribution (..),

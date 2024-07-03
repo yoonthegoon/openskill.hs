@@ -2,7 +2,11 @@
 {-# OPTIONS_GHC -Wno-type-defaults #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 
-module OpenSkill.Models.BradleyTerryFull where
+module OpenSkill.Models.BradleyTerryFull
+  ( bradleyTerryFull,
+    BradleyTerryFull (..),
+  )
+where
 
 import OpenSkill.Types
   ( Distribution (..),
@@ -37,23 +41,17 @@ instance Model BradleyTerryFull where
         where
           ratingI = sumd teamI
           filteredTeams = filter (\(q, _) -> q /= i) (zip [0 ..] teams)
-          omegaI = foldl calcOmegaI 0 filteredTeams
-          deltaI = foldl calcDeltaI 0 filteredTeams
+          (omegaI, deltaI) = foldl calc (0, 0) filteredTeams
 
-          calcOmegaI :: Double -> (Int, Team) -> Double
-          calcOmegaI acc (q, teamQ) = acc + (sigma ratingI ** 2 / cIQ) * (s - pIQ)
+          calc :: (Double, Double) -> (Int, Team) -> (Double, Double)
+          calc (accOmega, accDelta) (q, teamQ) = (accOmega + d, accDelta + n)
             where
               ratingQ = sumd teamQ
               cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta' ** 2)
               pIQ = exp (mu ratingI / cIQ) / (exp (mu ratingI / cIQ) + exp (mu ratingQ / cIQ))
               s = if q > i then 1 else 0
-
-          calcDeltaI :: Double -> (Int, Team) -> Double
-          calcDeltaI acc (_, teamQ) = acc + gammaQ' (sigma ratingI) cIQ * ((sigma ratingI / cIQ) ** 2) * pIQ * (1 - pIQ)
-            where
-              ratingQ = sumd teamQ
-              cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta' ** 2)
-              pIQ = exp (mu ratingI / cIQ) / (exp (mu ratingI / cIQ) + exp (mu ratingQ / cIQ))
+              d = (sigma ratingI ** 2 / cIQ) * (s - pIQ)
+              n = gammaQ' (sigma ratingI) cIQ * ((sigma ratingI / cIQ) ** 2) * pIQ * (1 - pIQ)
 
           ratePlayer :: Rating -> Rating
           ratePlayer ratingIJ = update ratingIJ ratingI omegaI deltaI kappa'

@@ -77,7 +77,8 @@ library
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.17.2.1,
-                      erf
+                      erf,
+                      time
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -101,6 +102,7 @@ executable openskill
     -- Other library packages from which modules are imported.
     build-depends:
         base ^>=4.17.2.1,
+        time,
         openskill
 
     -- Directories containing source files.

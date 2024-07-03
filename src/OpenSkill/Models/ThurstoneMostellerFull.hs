@@ -2,8 +2,8 @@
 {-# OPTIONS_GHC -Wno-type-defaults #-}
 
 module OpenSkill.Models.ThurstoneMostellerFull
-  ( ThurstoneMostellerFull (..),
-    thurstoneMostellerFull,
+  ( thurstoneMostellerFull,
+    ThurstoneMostellerFull (..),
   )
 where
 
@@ -41,26 +41,18 @@ instance Model ThurstoneMostellerFull where
         where
           ratingI = sumd teamI
           filteredTeams = filter (\(q, _) -> q /= i) (zip [0 ..] teams)
-          omegaI = foldl calcOmegaI 0 filteredTeams
-          deltaI = foldl calcDeltaI 0 filteredTeams
+          (omegaI, deltaI) = foldl calc (0, 0) filteredTeams
 
-          calcOmegaI :: Double -> (Int, Team) -> Double
-          calcOmegaI acc (q, teamQ) = acc + (sigma ratingI ** 2 / cIQ) * (s * v x t)
+          calc :: (Double, Double) -> (Int, Team) -> (Double, Double)
+          calc (accOmega, accDelta) (q, teamQ) = (accOmega + d, accDelta + n)
             where
               ratingQ = sumd teamQ
               cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta' ** 2)
               x = (mu ratingI - mu ratingQ) / cIQ
               t = epsilon' / cIQ
               s = if q > i then 1 else -1
-
-          calcDeltaI :: Double -> (Int, Team) -> Double
-          calcDeltaI acc (q, teamQ) = acc + (sigma ratingI / cIQ) ** 2 * (s * w x t)
-            where
-              ratingQ = sumd teamQ
-              cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta' ** 2)
-              x = (mu ratingI - mu ratingQ) / cIQ
-              t = epsilon' / cIQ
-              s = if q > i then 1 else -1
+              d = (sigma ratingI ** 2 / cIQ) * s * v x t
+              n = (sigma ratingI / cIQ) ** 2 * s * w x t
 
           ratePlayer :: Rating -> Rating
           ratePlayer ratingIJ = update ratingIJ ratingI omegaI deltaI kappa'

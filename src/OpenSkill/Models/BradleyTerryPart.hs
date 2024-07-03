@@ -1,6 +1,10 @@
 {-# LANGUAGE InstanceSigs #-}
 
-module OpenSkill.Models.BradleyTerryPart where
+module OpenSkill.Models.BradleyTerryPart
+  ( bradleyTerryPart,
+    BradleyTerryPart (..),
+  )
+where
 
 import OpenSkill.Types
   ( -- Distribution (..),
