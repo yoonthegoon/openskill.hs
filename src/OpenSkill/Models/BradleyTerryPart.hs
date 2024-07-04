@@ -15,7 +15,8 @@ import OpenSkill.Types
   )
 import OpenSkill.Utils
   ( defaultOptions,
-  -- update,
+    initialRating,
+    -- update,
   )
 
 bradleyTerryPart :: BradleyTerryPart
@@ -25,7 +26,7 @@ newtype BradleyTerryPart = BradleyTerryPart {options :: Options}
 
 instance Model BradleyTerryPart where
   newRating :: BradleyTerryPart -> Rating
-  newRating self = Rating (muI $ options self) (sigmaI $ options self)
+  newRating self = initialRating $ options self
 
-  rate :: BradleyTerryPart -> [Team] -> [Team]
-  rate _ _ = error "Not implemented"
+  rate :: BradleyTerryPart -> [Team] -> [Int] -> [Team]
+  rate _ _ _ = error "Not implemented"

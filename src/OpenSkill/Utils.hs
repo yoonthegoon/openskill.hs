@@ -2,13 +2,14 @@
 
 module OpenSkill.Utils
   ( defaultOptions,
+    initialRating,
     ordinal,
     update,
   )
 where
 
 import OpenSkill.Types
-  ( Options (Options),
+  ( Options (Options, muI, sigmaI),
     Rating (..),
   )
 
@@ -20,10 +21,19 @@ import OpenSkill.Types
 --
 -- Returns: @Options@ - default options
 defaultOptions :: Options
-defaultOptions = Options 25 (25 / 3) (25 / 6) 0.1 0.0001 gammaQ [0 ..]
-  where
-    gammaQ :: Double -> Double -> Double
-    gammaQ sigmaI c = sigmaI / c
+defaultOptions = Options 25 (25 / 3) (25 / 6) 0.1 0.0001 (/)
+
+-- | Initial rating for a player
+--
+-- @
+-- rating <- initialRating options
+-- @
+-- Arguments:
+-- * @options :: Options@ - options for the model
+--
+-- Returns: @Rating@ - initial rating
+initialRating :: Options -> Rating
+initialRating options = Rating (muI options) (sigmaI options)
 
 -- | Strength a player is 99.7% likely to be better than
 --

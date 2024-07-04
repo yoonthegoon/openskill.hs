@@ -1,5 +1,4 @@
 {-# LANGUAGE InstanceSigs #-}
-{-# OPTIONS_GHC -Wno-type-defaults #-}
 
 module OpenSkill.Models.ThurstoneMostellerFull
   ( thurstoneMostellerFull,
@@ -9,14 +8,15 @@ where
 
 import Data.Number.Erf (Erf (erf))
 import OpenSkill.Types
-  ( Distribution (..),
+  ( Distribution (sumd),
     Model (..),
-    Options (..),
-    Rating (..),
+    Options (beta, epsilon, kappa),
+    Rating (mu, sigma),
     Team,
   )
 import OpenSkill.Utils
   ( defaultOptions,
+    initialRating,
     update,
   )
 
@@ -27,38 +27,47 @@ newtype ThurstoneMostellerFull = ThurstoneMostellerFull {options :: Options}
 
 instance Model ThurstoneMostellerFull where
   newRating :: ThurstoneMostellerFull -> Rating
-  newRating self = Rating (muI $ options self) (sigmaI $ options self)
+  newRating self = initialRating $ options self
 
-  rate :: ThurstoneMostellerFull -> [Team] -> [Team]
-  rate self teams = zipWith (curry rateTeam) [0 ..] teams
+  rate :: ThurstoneMostellerFull -> [Team] -> [Int] -> [Team]
+  rate self teams ranks = zipWith (curry rateTeam) [0 ..] (zip teams ranks)
     where
       beta' = beta $ options self
       epsilon' = epsilon $ options self
       kappa' = kappa $ options self
 
-      rateTeam :: (Int, Team) -> Team
-      rateTeam (i, teamI) = map ratePlayer teamI
+      rateTeam :: (Int, (Team, Int)) -> Team
+      rateTeam (i, (teamI, rankI)) = map ratePlayer teamI
         where
           ratingI = sumd teamI
-          filteredTeams = filter (\(q, _) -> q /= i) (zip [0 ..] teams)
+          filteredTeams = filter (\(q, _) -> q /= i) (zip [0 ..] (zip teams ranks))
           (omegaI, deltaI) = foldl calc (0, 0) filteredTeams
 
-          calc :: (Double, Double) -> (Int, Team) -> (Double, Double)
-          calc (accOmega, accDelta) (q, teamQ) = (accOmega + d, accDelta + n)
+          calc :: (Double, Double) -> (Int, (Team, Int)) -> (Double, Double)
+          calc (accOmega, accDelta) (_, (teamQ, rankQ)) = (accOmega + d, accDelta + n)
             where
               ratingQ = sumd teamQ
               cIQ = sqrt (sigma ratingI ** 2 + sigma ratingQ ** 2 + 2 * beta' ** 2)
               x = (mu ratingI - mu ratingQ) / cIQ
               t = epsilon' / cIQ
-              s = if q > i then 1 else -1
-              d = (sigma ratingI ** 2 / cIQ) * s * v x t
-              n = (sigma ratingI / cIQ) ** 2 * s * w x t
+              d = (sigma ratingI ** 2 / cIQ) * g
+                where
+                  g
+                    | rankQ > rankI = v x t
+                    | rankQ < rankI = -v (-x) t
+                    | otherwise = v' x t
+              n = (sigma ratingI / cIQ) ** 2 * h
+                where
+                  h
+                    | rankQ > rankI = w x t
+                    | rankQ < rankI = w (-x) t
+                    | otherwise = w' x t
 
           ratePlayer :: Rating -> Rating
           ratePlayer ratingIJ = update ratingIJ ratingI omegaI deltaI kappa'
 
 pdf :: Double -> Double
-pdf x = exp (negate $ x ^ 2) / sqrt (2 * pi)
+pdf x = exp (negate $ x ** 2) / sqrt (2 * pi)
 
 cdf :: Double -> Double
 cdf x = (1 + erf (x / sqrt 2)) / 2
@@ -68,3 +77,12 @@ v x t = pdf (x - t) / cdf (x - t)
 
 w :: Double -> Double -> Double
 w x t = v x t * (v x t + x - t)
+
+v' :: Double -> Double -> Double
+v' x t = -((pdf (t - x) - pdf (-t - x)) / (cdf (t - x) - cdf (-t - x)))
+
+w' :: Double -> Double -> Double
+w' x t = num / den + v' x t ** 2
+  where
+    num = (t - x) * pdf (t - x) - (-t - x) * pdf (-t - x)
+    den = cdf (t - x) - cdf (-t - x)

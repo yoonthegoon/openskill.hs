@@ -1,6 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE InstanceSigs #-}
-{-# OPTIONS_GHC -Wno-type-defaults #-}
 
 module OpenSkill.Types
   ( Distribution (..),
@@ -20,8 +19,6 @@ class Distribution d where
   sumd [] = error "No distributions to add"
   sumd (x : xs) = foldr add x xs
 
-  sub :: d -> d -> d
-
 -- | A rating is a pair of mean and standard deviation
 -- * @mu@ - mean
 -- * @sigma@ - standard deviation
@@ -36,14 +33,7 @@ instance Distribution Rating where
   add self other =
     Rating
       { mu = mu self + mu other,
-        sigma = sqrt $ sigma self ^ 2 + sigma other ^ 2
-      }
-
-  sub :: Rating -> Rating -> Rating
-  sub self other =
-    Rating
-      { mu = mu self - mu other,
-        sigma = sqrt $ sigma self ^ 2 + sigma other ^ 2
+        sigma = sqrt $ sigma self ** 2 + sigma other ** 2
       }
 
 type Team = [Rating]
@@ -55,18 +45,16 @@ type Team = [Rating]
 -- * @epsilon :: Double@ - draw margin
 -- * @kappa :: Double@ - positive lower bound of player variance
 -- * @gammaQ :: Double -> Double -> Double@ - function to control how fast player variance is reduced
--- * @ranks :: [Int]@ - ranks of teams; smaller is better
 data Options = Options
   { muI :: Double,
     sigmaI :: Double,
     beta :: Double,
     epsilon :: Double,
     kappa :: Double,
-    gammaQ :: Double -> Double -> Double,
-    ranks :: [Int]
+    gammaQ :: Double -> Double -> Double
   }
   deriving (Generic)
 
 class Model m where
   newRating :: m -> Rating
-  rate :: m -> [Team] -> [Team]
+  rate :: m -> [Team] -> [Int] -> [Team]

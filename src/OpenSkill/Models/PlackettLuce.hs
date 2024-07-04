@@ -16,7 +16,8 @@ import OpenSkill.Types
   )
 import OpenSkill.Utils
   ( defaultOptions,
-  -- update,
+    initialRating,
+    -- update,
   )
 
 plackettLuce :: PlackettLuce
@@ -26,7 +27,7 @@ newtype PlackettLuce = PlackettLuce {options :: Options}
 
 instance Model PlackettLuce where
   newRating :: PlackettLuce -> Rating
-  newRating self = Rating (muI $ options self) (sigmaI $ options self)
+  newRating self = initialRating $ options self
 
-  rate :: PlackettLuce -> [Team] -> [Team]
-  rate _ _ = error "Not implemented"
+  rate :: PlackettLuce -> [Team] -> [Int] -> [Team]
+  rate _ _ _ = error "Not implemented"

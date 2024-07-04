@@ -1,14 +1,19 @@
 module Main where
 
 import Data.Time.Clock (diffUTCTime, getCurrentTime)
-import OpenSkill
+import OpenSkill.Models.BradleyTerryFull
+import OpenSkill.Models.ThurstoneMostellerFull
+import OpenSkill.Types
 
 main :: IO ()
 main = do
-  let rating = newRating bradleyTerryFull
+  let model = bradleyTerryFull
+  let rating = newRating model
   let team = [rating, rating, rating, rating]
   let teams = [team, team, team, team]
   start <- getCurrentTime
-  print $ iterate (rate thurstoneMostellerFull) teams !! 32
+  let teams' = iterate (\t -> rate model t [0 ..]) teams !! 100000
+  print teams'
   end <- getCurrentTime
   print $ diffUTCTime end start
+  print $ sumd $ map sumd teams'

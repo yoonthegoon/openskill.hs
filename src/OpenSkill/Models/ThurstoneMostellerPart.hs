@@ -15,7 +15,8 @@ import OpenSkill.Types
   )
 import OpenSkill.Utils
   ( defaultOptions,
-  -- update,
+    initialRating,
+    -- update,
   )
 
 thurstoneMostellerPart :: ThurstoneMostellerPart
@@ -25,7 +26,7 @@ newtype ThurstoneMostellerPart = ThurstoneMostellerPart {options :: Options}
 
 instance Model ThurstoneMostellerPart where
   newRating :: ThurstoneMostellerPart -> Rating
-  newRating self = Rating (muI $ options self) (sigmaI $ options self)
+  newRating self = initialRating $ options self
 
-  rate :: ThurstoneMostellerPart -> [Team] -> [Team]
-  rate _ _ = error "Not implemented"
+  rate :: ThurstoneMostellerPart -> [Team] -> [Int] -> [Team]
+  rate _ _ _ = error "Not implemented"
